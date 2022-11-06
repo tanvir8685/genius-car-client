@@ -1,11 +1,16 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import img from '../../assets/images/login/login.svg';
 import { GoogleAuthProvider } from "firebase/auth";
 import { AuthContext } from '../../contexts/AuthProvider/AuthProvider';
 
+
 const Login = () => {
-    const{signIn,googleSignIn}=useContext(AuthContext)
+    const{signIn,googleSignIn}=useContext(AuthContext);
+    const location=useLocation();
+    const navigate=useNavigate();
+
+    const from=location.state?.from?.pathname || '/';
     const handleLogIn = event => {
         event.preventDefault();
         const form=event.target;
@@ -16,7 +21,28 @@ const Login = () => {
         .then((userCredential) => {
             // Signed in 
             const user = userCredential.user;
-            console.log(user)
+            
+
+            const currentUser={
+                email:user.email
+            }
+            console.log(currentUser);
+
+            fetch('http://localhost:5000/jwt',{
+                method:'POST',
+                headers:{
+                    'content-type':'application/json'
+                },
+                body:JSON.stringify(currentUser)
+            })
+            .then(res=>res.json())
+            .then(data=>{
+                console.log(data);
+                localStorage.setItem('geniousToken',data.token);
+                navigate(from,{replace:true});
+
+            })
+            // navigate(from,{replace:true});
             // ...
           })
           .catch((error) => {

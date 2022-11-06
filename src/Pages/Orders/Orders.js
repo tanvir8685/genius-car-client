@@ -5,7 +5,7 @@ import app from '../../firebase/firebase.config';
 import OrderRow from './OrderRow';
 
 const Orders = () => {
-    const { user } = useContext(AuthContext);
+    const { user,logOut } = useContext(AuthContext);
     console.log(user)
     const [orders, setOrders] = useState([])
     console.log(orders)
@@ -14,7 +14,10 @@ const Orders = () => {
         const procced=window.confirm('Are you sure you want to cancel this order');
         if(procced){
             fetch(`http://localhost:5000/orders/${_id}`,{
-                method:'DELETE'
+                method:'DELETE',
+                headers:{
+                    authorization:`Bearer ${localStorage.getItem('geniousToken')}`
+                }
             })
             .then(res=>res.json())
             .then(data=>{
@@ -33,7 +36,8 @@ const Orders = () => {
         fetch(`http://localhost:5000/orders/${_id}`,{
             method:'PATCH',
             headers:{
-                'content-type':'application/json'
+                'content-type':'application/json',
+                authorization:`Bearer ${localStorage.getItem('geniousToken')}`
             },
             body:JSON.stringify({status:'Approved'})
         })
@@ -53,18 +57,28 @@ const Orders = () => {
     }
 
     useEffect(() => {
-        fetch(`http://localhost:5000/orders?email=${user?.email}`)
-            .then(res => res.json())
+        fetch(`http://localhost:5000/orders?email=${user?.email}`,{
+            headers:{
+                authorization:`Bearer ${localStorage.getItem('geniousToken')}`
+            }
+        })
+            .then(res => {
+                if(res.status===401 || res.status=== 403 ){
+                    return logOut()
+
+                }
+                return res.json()
+            })
             .then(data => setOrders(data))
 
     }
         ,
-        [user?.email]
+        [user?.email,logOut]
     )
 
     return (
         <div>
-            <h2 className='text-5xl'> you have {orders.length}  orders</h2>
+            <h2 className='text-5xl'> you have   orders</h2>
             <div className="overflow-x-auto w-full">
                 <table className="table w-full">
 

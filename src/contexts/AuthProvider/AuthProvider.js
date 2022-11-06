@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react';
-import {getAuth,createUserWithEmailAndPassword, signInWithPopup,onAuthStateChanged,signInWithEmailAndPassword} from 'firebase/auth'
+import {getAuth,createUserWithEmailAndPassword, signInWithPopup,onAuthStateChanged,signInWithEmailAndPassword, signOut} from 'firebase/auth'
 import app from '../../firebase/firebase.config';
 
 
@@ -23,6 +23,10 @@ const AuthProvider = ({children}) => {
     const googleSignIn=(provider)=>{
         return signInWithPopup(auth, provider)
     }
+    const logOut=()=>{
+        localStorage.removeItem('geniousToken');
+        return signOut(auth);
+    }
     useEffect(()=>{
         const unsubscrive= onAuthStateChanged(auth, (currentUser) => {
 
@@ -39,7 +43,8 @@ const AuthProvider = ({children}) => {
         loading,
         createUser,
         signIn,
-        googleSignIn
+        googleSignIn,
+        logOut
 
     }
     return (
