@@ -13,7 +13,7 @@ const Orders = () => {
     const handleDelete=_id=>{
         const procced=window.confirm('Are you sure you want to cancel this order');
         if(procced){
-            fetch(`http://localhost:5000/orders/${_id}`,{
+            fetch(`https://genius-car-server-gold-zeta.vercel.app/orders/${_id}`,{
                 method:'DELETE',
                 headers:{
                     authorization:`Bearer ${localStorage.getItem('geniousToken')}`
@@ -33,7 +33,7 @@ const Orders = () => {
 
     }
     const handleStatusUpdate=_id=>{
-        fetch(`http://localhost:5000/orders/${_id}`,{
+        fetch(`https://genius-car-server-gold-zeta.vercel.app/orders/${_id}`,{
             method:'PATCH',
             headers:{
                 'content-type':'application/json',
@@ -57,7 +57,7 @@ const Orders = () => {
     }
 
     useEffect(() => {
-        fetch(`http://localhost:5000/orders?email=${user?.email}`,{
+        fetch(`https://genius-car-server-gold-zeta.vercel.app/orders?email=${user?.email}`,{
             headers:{
                 authorization:`Bearer ${localStorage.getItem('geniousToken')}`
             }

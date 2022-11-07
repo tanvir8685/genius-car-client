@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import img from '../../assets/images/login/login.svg';
 import { GoogleAuthProvider } from "firebase/auth";
 import { AuthContext } from '../../contexts/AuthProvider/AuthProvider';
+import { setAuthToken } from '../../api/auth';
 
 
 const Login = () => {
@@ -28,7 +29,7 @@ const Login = () => {
             }
             console.log(currentUser);
 
-            fetch('http://localhost:5000/jwt',{
+            fetch('https://genius-car-server-gold-zeta.vercel.app/jwt',{
                 method:'POST',
                 headers:{
                     'content-type':'application/json'
@@ -57,7 +58,8 @@ const Login = () => {
           .then((result) => {
             
             const user = result.user;
-            // ...
+            setAuthToken(user);
+            
           }).catch((error) => {
             console.log(error)
             

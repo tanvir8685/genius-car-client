@@ -31,7 +31,7 @@ const Checkout = () => {
         //     alert('Give the right number')
 
         // }
-        fetch('http://localhost:5000/orders',{
+        fetch('https://genius-car-server-gold-zeta.vercel.app/orders',{
             method:'POST',
             headers:{
                 'content-type':'application/json',

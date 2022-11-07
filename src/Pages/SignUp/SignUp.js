@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { setAuthToken } from '../../api/auth';
 import img from '../../assets/images/login/login.svg'
 import { AuthContext } from '../../contexts/AuthProvider/AuthProvider';
 
@@ -17,6 +18,7 @@ const SignUp = () => {
             // Signed in 
             const user = userCredential.user;
             console.log(user)
+            setAuthToken(user);
             // ...
           })
           .catch((error) => {
